@@ -6,4 +6,8 @@
 
 #ifdef __OBJC__
     #import <Cocoa/Cocoa.h>
+    #import <WebKit/WebKit.h>
+    #import <AppKit/AppKit.h>
+
+    #import "NSView+Esteban.h"
 #endif

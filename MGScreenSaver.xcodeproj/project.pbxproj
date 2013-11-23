@@ -12,6 +12,10 @@
 		5B3A4343183ABA6200980029 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5B3A4341183ABA6200980029 /* InfoPlist.strings */; };
 		5B3A4347183ABA6300980029 /* MGScreenSaverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3A4346183ABA6300980029 /* MGScreenSaverView.m */; };
 		5B82C2BD183AC6BA002CD8E5 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B82C2BC183AC6BA002CD8E5 /* WebKit.framework */; };
+		5BC3AE4E1840EC74003C427F /* GifView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BC3AE4C1840EC74003C427F /* GifView.h */; };
+		5BC3AE4F1840EC74003C427F /* GifView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BC3AE4D1840EC74003C427F /* GifView.m */; };
+		5BC3AE521840FA23003C427F /* NSView+Esteban.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BC3AE501840FA23003C427F /* NSView+Esteban.h */; };
+		5BC3AE531840FA23003C427F /* NSView+Esteban.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BC3AE511840FA23003C427F /* NSView+Esteban.m */; };
 		5BC7C2BB1840E5F90000E209 /* MGScreenSaver.saver in Install Screen Saver */ = {isa = PBXBuildFile; fileRef = 5B3A4333183ABA6200980029 /* MGScreenSaver.saver */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +46,10 @@
 		5B3A4345183ABA6300980029 /* MGScreenSaverView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGScreenSaverView.h; sourceTree = "<group>"; };
 		5B3A4346183ABA6300980029 /* MGScreenSaverView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MGScreenSaverView.m; sourceTree = "<group>"; };
 		5B82C2BC183AC6BA002CD8E5 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		5BC3AE4C1840EC74003C427F /* GifView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GifView.h; sourceTree = "<group>"; };
+		5BC3AE4D1840EC74003C427F /* GifView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GifView.m; sourceTree = "<group>"; };
+		5BC3AE501840FA23003C427F /* NSView+Esteban.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+Esteban.h"; sourceTree = "<group>"; };
+		5BC3AE511840FA23003C427F /* NSView+Esteban.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+Esteban.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +110,10 @@
 				5B3A4345183ABA6300980029 /* MGScreenSaverView.h */,
 				5B3A4346183ABA6300980029 /* MGScreenSaverView.m */,
 				5B3A433F183ABA6200980029 /* Supporting Files */,
+				5BC3AE4C1840EC74003C427F /* GifView.h */,
+				5BC3AE4D1840EC74003C427F /* GifView.m */,
+				5BC3AE501840FA23003C427F /* NSView+Esteban.h */,
+				5BC3AE511840FA23003C427F /* NSView+Esteban.m */,
 			);
 			path = MGScreenSaver;
 			sourceTree = "<group>";
@@ -123,6 +135,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BC3AE4E1840EC74003C427F /* GifView.h in Headers */,
+				5BC3AE521840FA23003C427F /* NSView+Esteban.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,6 +216,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B3A4347183ABA6300980029 /* MGScreenSaverView.m in Sources */,
+				5BC3AE4F1840EC74003C427F /* GifView.m in Sources */,
+				5BC3AE531840FA23003C427F /* NSView+Esteban.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

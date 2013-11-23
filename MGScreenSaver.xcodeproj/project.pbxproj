@@ -12,7 +12,22 @@
 		5B3A4343183ABA6200980029 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5B3A4341183ABA6200980029 /* InfoPlist.strings */; };
 		5B3A4347183ABA6300980029 /* MGScreenSaverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3A4346183ABA6300980029 /* MGScreenSaverView.m */; };
 		5B82C2BD183AC6BA002CD8E5 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B82C2BC183AC6BA002CD8E5 /* WebKit.framework */; };
+		5BC7C2BB1840E5F90000E209 /* MGScreenSaver.saver in Install Screen Saver */ = {isa = PBXBuildFile; fileRef = 5B3A4333183ABA6200980029 /* MGScreenSaver.saver */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5BC7C2BA1840E5D50000E209 /* Install Screen Saver */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "~/Library/Screen Savers";
+			dstSubfolderSpec = 0;
+			files = (
+				5BC7C2BB1840E5F90000E209 /* MGScreenSaver.saver in Install Screen Saver */,
+			);
+			name = "Install Screen Saver";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		5B3A4333183ABA6200980029 /* MGScreenSaver.saver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MGScreenSaver.saver; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -123,6 +138,7 @@
 				5B3A432F183ABA6200980029 /* Headers */,
 				5B3A4330183ABA6200980029 /* Resources */,
 				5B3A4331183ABA6200980029 /* Rez */,
+				5BC7C2BA1840E5D50000E209 /* Install Screen Saver */,
 			);
 			buildRules = (
 			);

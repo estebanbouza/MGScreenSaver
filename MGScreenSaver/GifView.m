@@ -63,8 +63,8 @@
     NSInteger kVarianzeMaxX = 5;
     NSInteger kVarianzeMaxY = 5;
     
-    NSInteger kVarianzeMinX = 1;
-    NSInteger kVarianzeMinY = 1;
+    NSInteger kVarianzeMinX = 0;
+    NSInteger kVarianzeMinY = 0;
     
     NSInteger varianzeXDiff = kVarianzeMaxX - kVarianzeMinX;
     NSInteger varianzeYDiff = kVarianzeMaxY - kVarianzeMinY;

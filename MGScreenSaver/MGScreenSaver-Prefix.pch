@@ -9,5 +9,7 @@
     #import <WebKit/WebKit.h>
     #import <AppKit/AppKit.h>
 
+    #import <FMDatabase.h>
+
     #import "NSView+Esteban.h"
 #endif

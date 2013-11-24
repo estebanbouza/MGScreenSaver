@@ -10,9 +10,14 @@
 
 #import "GifView.h"
 
+static  NSString * const kDatabasePath = @"/Users/esteban/myprojects/MGScreenSaver/MGScreenSaver/main.db";
+
+static NSInteger kNumberOfGifs = 7;
+
 @interface MGScreenSaverView ()
 
 @property (nonatomic, strong) NSMutableArray *gifViews;
+@property (nonatomic, strong) FMDatabase *database;
 
 @end
 
@@ -25,8 +30,9 @@
         
         NSLog(@"Date built %s %s", __DATE__, __TIMESTAMP__);
         
-        [self addRandomGif];
-
+        for (NSInteger i = 0; i < kNumberOfGifs; i++) {
+            [self addRandomGif];
+        }
         
         [self setAnimationTimeInterval:1/15.0];
     }
@@ -54,16 +60,13 @@
         CGPoint offset = [gifView nextOffsetPoint];
         
         CGRect currentRect = gifView.frame;
-        NSLog(@"View center: %@", NSStringFromRect(currentRect));
         CGRect adjustedRect = CGRectOffset(currentRect, offset.x, offset.y);
-        NSLog(@"View center + offset: %@", NSStringFromRect(adjustedRect));
         
         BOOL inside = CGRectIntersectsRect(adjustedRect, self.bounds);
         if (inside) {
             gifView.frame = adjustedRect;
         }
         else {
-            NSLog(@"Replaced gifview: %@", gifView);
             [self replaceGifView:gifView];
         }
 
@@ -87,6 +90,8 @@
     [self.gifViews removeObject:gifView];
     [gifView removeFromSuperview];
     
+    NSLog(@"Replaced gifview: %@", gifView);
+
     [self addRandomGif];
 }
 
@@ -97,14 +102,11 @@
         self.gifViews = [NSMutableArray new];
     }
     
-    NSArray *gifs = @[[NSURL URLWithString:@"http://media.tumblr.com/51b1a5d240efee5e96b2ea2c60cc6369/tumblr_mvxc0vSF5X1rnq0vfo1_250.gif"],
-                      [NSURL URLWithString:@"http://24.media.tumblr.com/0978c70cf361ef3d22a75c9062270554/tumblr_mwjpa9W3qV1qedb29o1_500.gif"],
-                      [NSURL URLWithString:@"http://25.media.tumblr.com/d01a23839701119a50ecced55d50dd24/tumblr_mlx481XoKh1qzjoy8o1_400.gif"],
-                      [NSURL URLWithString:@"http://24.media.tumblr.com/tumblr_lgj6rdCJje1qf3xzvo1_500.gif"]
-                      ];
     
-    NSURL *gifURL = gifs[arc4random() % gifs.count];
+    NSDictionary *gifDict = [self nextRandomGifInfo];
     
+    NSURL *gifURL = gifDict[@"gifLink"];
+    NSString *gifText = gifDict[@"gifExplanation"];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         NSImage *image = [[NSImage alloc] initWithData:[[NSData alloc] initWithContentsOfURL:gifURL]];
@@ -112,7 +114,7 @@
         CGSize imageSize = image.size;
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            GifView *gifView = [[GifView alloc] initWithText:@"A Gif" gifURL:gifURL];
+            GifView *gifView = [[GifView alloc] initWithText:gifText gifURL:gifURL];
             [self addSubview:gifView];
             
             gifView.frame = CGRectMake(0, 0, imageSize.width + kGifViewTextWidth, imageSize.height);
@@ -123,7 +125,39 @@
 
     });
     
+}
+
+- (NSDictionary *)nextRandomGifInfo {
+    if (!self.database) {
+        self.database = [FMDatabase databaseWithPath:kDatabasePath];
+        if (![self.database open]) {
+            [NSException raise:@"Couldn't open database" format:nil];
+        }
+    }
+
+    FMResultSet *rs = [self.database executeQuery:@"select body_xml from messages where body_xml like '%http%.gif%' order by random() limit 1"];
     
+    [rs next];
+    
+    NSString *textResult = [rs stringForColumn:@"body_xml"];
+    
+    NSRegularExpression *gifRegex = [NSRegularExpression regularExpressionWithPattern:@"(.*)<a href=.*(http.*gif).*a>(.*)" options:0 error:nil];
+    
+    NSArray *matches = [gifRegex matchesInString:textResult options:0 range:NSMakeRange(0, textResult.length)];
+    NSString *gifLink = nil;
+    NSString *gifExplanation = [NSString string];
+
+    
+    if (matches > 0) {
+        gifLink = [textResult substringWithRange:[matches[0] rangeAtIndex:2]];
+
+        gifExplanation = [gifExplanation stringByAppendingString:[textResult substringWithRange:[matches[0] rangeAtIndex:1]]];
+        gifExplanation = [gifExplanation stringByAppendingString:[textResult substringWithRange:[matches[0] rangeAtIndex:3]]];
+    }
+    
+    
+    return @{@"gifLink" : [NSURL URLWithString:gifLink],
+             @"gifExplanation" : gifExplanation};
     
 }
 

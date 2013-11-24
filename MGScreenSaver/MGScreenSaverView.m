@@ -135,24 +135,24 @@ static NSInteger kNumberOfGifs = 7;
         }
     }
 
-    FMResultSet *rs = [self.database executeQuery:@"select body_xml from messages where body_xml like '%http%.gif%' order by random() limit 1"];
+    FMResultSet *rs = [self.database executeQuery:@"select body_xml from messages where body_xml like '%http%.gif%' or body_xml like '%http%.jpeg%' or body_xml like '%http%.jpg%' or body_xml like '%http%.png%' order by random() limit 1"];
     
     [rs next];
     
     NSString *textResult = [rs stringForColumn:@"body_xml"];
     
-    NSRegularExpression *gifRegex = [NSRegularExpression regularExpressionWithPattern:@"(.*)<a href=.*(http.*gif).*a>(.*)" options:0 error:nil];
+    NSRegularExpression *gifRegex = [NSRegularExpression regularExpressionWithPattern:@"(.*)<a href=.*(http.*(gif|png|jpeg|jpg)).*a>(.*)" options:0 error:nil];
     
     NSArray *matches = [gifRegex matchesInString:textResult options:0 range:NSMakeRange(0, textResult.length)];
     NSString *gifLink = nil;
-    NSString *gifExplanation = @"Text: ";//[NSString string];
+    NSString *gifExplanation = [NSString string];
 
     
     if (matches > 0) {
         gifLink = [textResult substringWithRange:[matches[0] rangeAtIndex:2]];
 
         gifExplanation = [gifExplanation stringByAppendingString:[textResult substringWithRange:[matches[0] rangeAtIndex:1]]];
-        gifExplanation = [gifExplanation stringByAppendingString:[textResult substringWithRange:[matches[0] rangeAtIndex:3]]];
+        gifExplanation = [gifExplanation stringByAppendingString:[textResult substringWithRange:[matches[0] rangeAtIndex:4]]];
     }
     
     

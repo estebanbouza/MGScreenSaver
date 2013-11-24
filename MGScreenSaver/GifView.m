@@ -34,6 +34,7 @@
         self.textField.textColor = [NSColor greenColor];
         self.textField.font = [NSFont systemFontOfSize:20.];
         self.textField.backgroundColor = [NSColor clearColor];
+        self.textField.alignment = NSRightTextAlignment;
         [self.textField setEditable:NO];
         [self addSubview:self.textField];
         
@@ -43,6 +44,22 @@
         [self.webView.mainFrame loadRequest:[NSURLRequest requestWithURL:self.gifURL]];
         
         [self resizeSubviewsWithOldSize:self.bounds.size];
+        
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+            NSImage *image = [[NSImage alloc] initWithData:[[NSData alloc] initWithContentsOfURL:gifURL]];
+            
+            CGSize imageSize = image.size;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.frame = CGRectMake(self.frame.origin.x,
+                                        self.frame.origin.y,
+                                        imageSize.width + kGifViewTextWidth,
+                                        imageSize.height);
+            });
+            
+        });
+            
     }
     return self;
 }
@@ -50,10 +67,12 @@
 - (void)resizeSubviewsWithOldSize:(NSSize)oldSize {
     [super layout];
     
-    CGRect bounds = self.bounds;
-    
-    self.textField.frame = CGRectMake(0, 0, CGRectGetWidth(bounds)*0.5, CGRectGetHeight(bounds));
-    self.webView.frame = CGRectMake(CGRectGetWidth(bounds)*0.5, 0, CGRectGetWidth(bounds)*0.5, CGRectGetHeight(self.bounds));
+    self.textField.frame = CGRectMake(0, 0, kGifViewTextWidth, CGRectGetHeight(self.bounds));
+
+    self.webView.frame = CGRectMake(kGifViewTextWidth,
+                                    0,
+                                    CGRectGetWidth(self.bounds) - kGifViewTextWidth,
+                                    CGRectGetHeight(self.bounds));
 }
 
 - (CGPoint)nextOffsetPoint {
@@ -69,16 +88,14 @@
     NSInteger varianzeXDiff = kVarianzeMaxX - kVarianzeMinX;
     NSInteger varianzeYDiff = kVarianzeMaxY - kVarianzeMinY;
     
-    NSInteger kMaxX = 20.;
-    NSInteger kMaxY = 20.;
+    NSInteger kMaxX = 12.;
+    NSInteger kMaxY = 12.;
     
     CGFloat offsetX = (arc4random() % (varianzeXDiff)) - (NSInteger)varianzeXDiff/2;
     offsetX += offsetX > 0 ? kVarianzeMinX : -kVarianzeMinX;
     
     CGFloat offsetY = (arc4random() % (varianzeYDiff)) - (NSInteger)varianzeYDiff/2;
     offsetY += offsetY > 0 ? kVarianzeMinY : -kVarianzeMinY;
-
-    NSLog(@"OffsetX: %f", offsetX);
     
     nextX += offsetX;
     nextY += offsetY;
@@ -87,8 +104,6 @@
     nextY = nextY > 0 ? MIN(nextY, kMaxY) : MAX(nextY, -kMaxY);
 
     _nextOffsetPoint = CGPointMake(nextX, nextY);
-    
-    NSLog(@"Next offset: %@", NSStringFromPoint(_nextOffsetPoint));
     
     return _nextOffsetPoint;
 }

@@ -26,12 +26,9 @@
         NSLog(@"Date built %s %s", __DATE__, __TIMESTAMP__);
         
         [self addRandomGif];
-        [self addRandomGif];
-        [self addRandomGif];
-        [self addRandomGif];
 
         
-        [self setAnimationTimeInterval:1/2.0];
+        [self setAnimationTimeInterval:1/15.0];
     }
     return self;
 }
@@ -61,9 +58,18 @@
         CGRect adjustedRect = CGRectOffset(currentRect, offset.x, offset.y);
         NSLog(@"View center + offset: %@", NSStringFromRect(adjustedRect));
         
-        gifView.frame = adjustedRect;
-        
+        BOOL inside = CGRectIntersectsRect(adjustedRect, self.bounds);
+        if (inside) {
+            gifView.frame = adjustedRect;
+        }
+        else {
+            NSLog(@"Replaced gifview: %@", gifView);
+            [self replaceGifView:gifView];
+        }
+
     }
+    
+    
     return;
 }
 
@@ -77,6 +83,13 @@
     return nil;
 }
 
+- (void)replaceGifView:(GifView* )gifView {
+    [self.gifViews removeObject:gifView];
+    [gifView removeFromSuperview];
+    
+    [self addRandomGif];
+}
+
 
 - (void)addRandomGif {
     
@@ -85,21 +98,34 @@
     }
     
     NSArray *gifs = @[[NSURL URLWithString:@"http://media.tumblr.com/51b1a5d240efee5e96b2ea2c60cc6369/tumblr_mvxc0vSF5X1rnq0vfo1_250.gif"],
-                      
+                      [NSURL URLWithString:@"http://24.media.tumblr.com/0978c70cf361ef3d22a75c9062270554/tumblr_mwjpa9W3qV1qedb29o1_500.gif"],
+                      [NSURL URLWithString:@"http://25.media.tumblr.com/d01a23839701119a50ecced55d50dd24/tumblr_mlx481XoKh1qzjoy8o1_400.gif"],
                       [NSURL URLWithString:@"http://24.media.tumblr.com/tumblr_lgj6rdCJje1qf3xzvo1_500.gif"]
                       ];
     
-    NSURL *gifURL = gifs[arc4random()%gifs.count];
+    NSURL *gifURL = gifs[arc4random() % gifs.count];
     
-    GifView *gifView = [[GifView alloc] initWithText:@"A Gif" gifURL:gifURL];
-    [self addSubview:gifView];
-    gifView.frame = CGRectMake(0, 0, 600, 600);
-    [self.gifViews addObject:gifView];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        NSImage *image = [[NSImage alloc] initWithData:[[NSData alloc] initWithContentsOfURL:gifURL]];
+        
+        CGSize imageSize = image.size;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            GifView *gifView = [[GifView alloc] initWithText:@"A Gif" gifURL:gifURL];
+            [self addSubview:gifView];
+            
+            gifView.frame = CGRectMake(0, 0, imageSize.width + kGifViewTextWidth, imageSize.height);
+            
+            [self.gifViews addObject:gifView];
+
+        });
+
+    });
+    
+    
     
 }
 
-- (void)removeGifView:(GifView *)gifView {
-    
-}
 
 @end

@@ -34,7 +34,7 @@ static NSInteger kNumberOfGifs = 7;
             [self addRandomGif];
         }
         
-        [self setAnimationTimeInterval:1/15.0];
+        [self setAnimationTimeInterval:1/8.0];
     }
     return self;
 }
@@ -61,17 +61,16 @@ static NSInteger kNumberOfGifs = 7;
         
         CGRect currentRect = gifView.frame;
         CGRect adjustedRect = CGRectOffset(currentRect, offset.x, offset.y);
+        CGRect screenRect = CGRectInset(self.bounds, -100, -100);
         
-        BOOL inside = CGRectIntersectsRect(adjustedRect, self.bounds);
+        BOOL inside = CGRectIntersectsRect(adjustedRect, screenRect);
         if (inside) {
             gifView.frame = adjustedRect;
         }
         else {
             [self replaceGifView:gifView];
         }
-
     }
-    
     
     return;
 }
@@ -90,8 +89,6 @@ static NSInteger kNumberOfGifs = 7;
     [self.gifViews removeObject:gifView];
     [gifView removeFromSuperview];
     
-    NSLog(@"Replaced gifview: %@", gifView);
-
     [self addRandomGif];
 }
 
@@ -117,7 +114,10 @@ static NSInteger kNumberOfGifs = 7;
             GifView *gifView = [[GifView alloc] initWithText:gifText gifURL:gifURL];
             [self addSubview:gifView];
             
-            gifView.frame = CGRectMake(0, 0, imageSize.width + kGifViewTextWidth, imageSize.height);
+            gifView.frame = CGRectMake(arc4random()%(int)((CGRectGetWidth(self.bounds) - imageSize.width - kGifViewTextWidth)),
+                                       CGRectGetHeight(self.bounds),
+                                       imageSize.width + kGifViewTextWidth,
+                                       imageSize.height);
             
             [self.gifViews addObject:gifView];
 
@@ -145,7 +145,7 @@ static NSInteger kNumberOfGifs = 7;
     
     NSArray *matches = [gifRegex matchesInString:textResult options:0 range:NSMakeRange(0, textResult.length)];
     NSString *gifLink = nil;
-    NSString *gifExplanation = [NSString string];
+    NSString *gifExplanation = @"Text: ";//[NSString string];
 
     
     if (matches > 0) {

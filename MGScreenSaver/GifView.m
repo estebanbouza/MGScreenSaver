@@ -45,6 +45,10 @@
         
         [self resizeSubviewsWithOldSize:self.bounds.size];
         
+        CGFloat y = arc4random()%8 + 3;
+        CGFloat x = (CGFloat)(arc4random()%3) - 1.;
+        
+        self.nextOffsetPoint = CGPointMake(x, -y);
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
             NSImage *image = [[NSImage alloc] initWithData:[[NSData alloc] initWithContentsOfURL:gifURL]];
@@ -75,38 +79,39 @@
                                     CGRectGetHeight(self.bounds));
 }
 
-- (CGPoint)nextOffsetPoint {
-    CGFloat nextX = _nextOffsetPoint.x;
-    CGFloat nextY = _nextOffsetPoint.y;
-
-    NSInteger kVarianzeMaxX = 5;
-    NSInteger kVarianzeMaxY = 5;
-    
-    NSInteger kVarianzeMinX = 0;
-    NSInteger kVarianzeMinY = 0;
-    
-    NSInteger varianzeXDiff = kVarianzeMaxX - kVarianzeMinX;
-    NSInteger varianzeYDiff = kVarianzeMaxY - kVarianzeMinY;
-    
-    NSInteger kMaxX = 12.;
-    NSInteger kMaxY = 12.;
-    
-    CGFloat offsetX = (arc4random() % (varianzeXDiff)) - (NSInteger)varianzeXDiff/2;
-    offsetX += offsetX > 0 ? kVarianzeMinX : -kVarianzeMinX;
-    
-    CGFloat offsetY = (arc4random() % (varianzeYDiff)) - (NSInteger)varianzeYDiff/2;
-    offsetY += offsetY > 0 ? kVarianzeMinY : -kVarianzeMinY;
-    
-    nextX += offsetX;
-    nextY += offsetY;
-
-    nextX = nextX > 0 ? MIN(nextX, kMaxX) : MAX(nextX, -kMaxX);
-    nextY = nextY > 0 ? MIN(nextY, kMaxY) : MAX(nextY, -kMaxY);
-
-    _nextOffsetPoint = CGPointMake(nextX, nextY);
-    
-    return _nextOffsetPoint;
-}
+//- (CGPoint)nextOffsetPoint {
+//    CGFloat nextX = _nextOffsetPoint.x;
+//    CGFloat nextY = _nextOffsetPoint.y;
+//
+//    NSInteger kVarianzeMaxX = 5;
+//    NSInteger kVarianzeMaxY = 5;
+//    
+//    NSInteger kVarianzeMinX = 0;
+//    NSInteger kVarianzeMinY = 0;
+//    
+//    NSInteger varianzeXDiff = kVarianzeMaxX - kVarianzeMinX;
+//    NSInteger varianzeYDiff = kVarianzeMaxY - kVarianzeMinY;
+//    
+//    NSInteger kMaxX = 12.;
+//    NSInteger kMaxY = 12.;
+//    
+//    CGFloat offsetX = (arc4random() % (varianzeXDiff)) - (NSInteger)varianzeXDiff/2;
+//    offsetX += offsetX > 0 ? kVarianzeMinX : -kVarianzeMinX;
+//    
+//    CGFloat offsetY = (arc4random() % (varianzeYDiff)) - (NSInteger)varianzeYDiff/2;
+//    offsetY += offsetY > 0 ? kVarianzeMinY : -kVarianzeMinY;
+//    
+//    nextX += offsetX;
+//    nextY += offsetY;
+//
+//    nextX = nextX > 0 ? MIN(nextX, kMaxX) : MAX(nextX, -kMaxX);
+//    nextY = nextY > 0 ? MIN(nextY, kMaxY) : MAX(nextY, -kMaxY);
+//
+//    _nextOffsetPoint = CGPointMake(nextX, nextY);
+//    _nextOffsetPoint = CGPointMake(0, arc4random()%3);
+//    
+//    return _nextOffsetPoint;
+//}
 
 
 @end

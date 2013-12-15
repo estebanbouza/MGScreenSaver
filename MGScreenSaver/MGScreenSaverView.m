@@ -10,7 +10,7 @@
 
 #import "GifView.h"
 
-static  NSString * const kDatabasePath = @"/Users/esteban/myprojects/MGScreenSaver/MGScreenSaver/main.db";
+static NSString * const kUsername = @"esteban.bouza.mobgen";
 
 static NSInteger kNumberOfGifs = 7;
 
@@ -129,7 +129,21 @@ static NSInteger kNumberOfGifs = 7;
 
 - (NSDictionary *)nextRandomGifInfo {
     if (!self.database) {
-        self.database = [FMDatabase databaseWithPath:kDatabasePath];
+        
+        NSError *error = nil;
+        NSURL *appSupportDir = [[NSFileManager defaultManager] URLForDirectory:NSApplicationSupportDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&error];
+
+        appSupportDir = [appSupportDir URLByAppendingPathComponent:@"Skype"];
+        appSupportDir = [appSupportDir URLByAppendingPathComponent:kUsername];
+        appSupportDir = [appSupportDir URLByAppendingPathComponent:@"main.db"];
+
+        NSString *path = appSupportDir.path;
+//        path = [path stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
+        
+        NSLog(@"app support dir %@", path);
+        
+        
+        self.database = [FMDatabase databaseWithPath:path];
         if (![self.database open]) {
             [NSException raise:@"Couldn't open database" format:nil];
         }
